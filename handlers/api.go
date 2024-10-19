@@ -11,6 +11,8 @@ import (
 //go:embed VERSION
 var version string
 
+// Api returns the requested URL in JSON format.
+// It also returns the Ladder version and the headers of the request and response.
 func Api(c *fiber.Ctx) error {
 	// Get the url from the URL
 	urlQuery := c.Params("*")
@@ -23,11 +25,13 @@ func Api(c *fiber.Ctx) error {
 		return c.SendString(err.Error())
 	}
 
+	// Create a response object
 	response := Response{
 		Version: version,
 		Body:    body,
 	}
 
+	// Add the request headers to the response
 	response.Request.Headers = make([]any, 0, len(req.Header))
 	for k, v := range req.Header {
 		response.Request.Headers = append(response.Request.Headers, map[string]string{
@@ -36,6 +40,7 @@ func Api(c *fiber.Ctx) error {
 		})
 	}
 
+	// Add the response headers to the response
 	response.Response.Headers = make([]any, 0, len(resp.Header))
 	for k, v := range resp.Header {
 		response.Response.Headers = append(response.Response.Headers, map[string]string{
@@ -44,6 +49,7 @@ func Api(c *fiber.Ctx) error {
 		})
 	}
 
+	// Return the response as JSON
 	return c.JSON(response)
 }
 
