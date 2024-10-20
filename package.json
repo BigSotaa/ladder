@@ -1,20 +1,20 @@
 {
-	"name": "your-project-name",
-	"version": "1.0.0",
-	"scripts": {
-		"start": "node server.js",
-		"test": "jest",
-		"build-css": "npx tailwindcss -i ./styles/input.css -o ./styles/output.css --build && npx minify ./styles/output.css > ./cmd/styles.css",
-		"build": "npm run build-css"
-	},
-	"dependencies": {
-		"detect-port": "^1.6.1",
-		"express": "^4.21.1",
-		"http-proxy-middleware": "^3.0.3",
-		"minify": "^7.0.0",
-		"tailwindcss": "^3.0.0"
-	},
-	"devDependencies": {
-		"jest": "^27.0.0"
-	}
+  "name": "your-project-name",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js",
+    "test": "jest",
+    "build-css": "npx tailwindcss -i ./styles/input.css -o ./styles/output.css --build && npx minify ./styles/output.css > ./cmd/styles.css",
+    "build": "npm run build-css"
+  },
+  "dependencies": {
+    "detect-port": "^1.6.1",
+    "express": "^4.21.1",
+    "http-proxy-middleware": "^3.0.3",
+    "minify": "^7.0.0",
+    "tailwindcss": "^3.0.0"
+  },
+  "devDependencies": {
+    "jest": "^27.0.0"
+  }
 }

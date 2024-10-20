@@ -37,7 +37,7 @@ app.use('/en', createProxyMiddleware({
   target: 'https://www.tiktok.com',
   changeOrigin: true,
   pathRewrite: {
-    '^/en': '/en', // Rewrite the path
+    '^/en': '' // Remove the /en prefix when forwarding to the target
   },
   onProxyReq: (proxyReq, req, res) => {
     // Modify headers
@@ -71,6 +71,6 @@ detect(DEFAULT_PORT, (err, openPort) => {
     console.log(`Port ${DEFAULT_PORT} is in use, switching to port ${openPort}`);
   }
   app.listen(openPort, () => {
-    console.log(`Server is running on port ${openPort}`);
+    console.log(`Server is running on http://localhost:${openPort}`);
   });
 });

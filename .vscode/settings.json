@@ -1,5 +1,21 @@
 {
     "github-actions.workflows.pinned.workflows": [
         ".github/workflows/release-binaries.yaml"
-    ]
+    ],
+    "search.exclude": {
+        "**/*.code-search": false,
+        "**/bower_components": false,
+        "**/node_modules": false
+    },
+    "search.useIgnoreFiles": true,
+    "search.useGlobalIgnoreFiles": true,
+    "search.useParentIgnoreFiles": true,
+    "files.exclude": {
+        "**/.DS_Store": false,
+        "**/.git": false,
+        "**/.hg": false,
+        "**/.svn": false,
+        "**/CVS": false,
+        "**/Thumbs.db": false
+    }
 }
