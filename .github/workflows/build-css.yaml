@@ -38,4 +38,4 @@ jobs:
           git commit -m "Update CSS"
           git push
         env:
-          GORELEASER_GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}
+          GORELEASER_GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}          npx tailwindcss -v          npx tailwindcss -v
