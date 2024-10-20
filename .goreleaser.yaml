@@ -15,10 +15,17 @@ builds:
       - linux
       - darwin
       - windows
-      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
 
 archives:
   - format: tar.gz
+    files:
+      - LICENSE
+      - README.md
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     format_overrides:
         - goos: windows
