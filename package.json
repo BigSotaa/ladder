@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node server.js",
-    "build": "npm run build-css && npm run build-other"  // Add other build steps as needed
+    "test": "jest",
+    "build-css": "npx tailwindcss -i ./styles/input.css -o ./styles/output.css --build && npx minify ./styles/output.css > ./cmd/styles.css",
+    "build": "npm run build-css && npm run build-other"
   },
   "dependencies": {
     "tailwindcss": "^3.0.0",
     "minify": "^7.0.0"
-    "start": "node server.js",
-    "test": "jest"
   },
   "devDependencies": {
     "jest": "^27.0.0"
