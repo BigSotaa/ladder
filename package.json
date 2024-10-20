@@ -8,6 +8,7 @@
 		"build": "npm run build-css"
 	},
 	"dependencies": {
+		"detect-port": "^1.6.1",
 		"express": "^4.21.1",
 		"http-proxy-middleware": "^3.0.3",
 		"minify": "^7.0.0",

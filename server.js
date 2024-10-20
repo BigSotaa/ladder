@@ -1,9 +1,10 @@
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const path = require('path');
+const detect = require('detect-port');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const DEFAULT_PORT = process.env.PORT || 3002;
 
 // Serve static files from the "cmd" directory
 app.use(express.static(path.join(__dirname, 'cmd')));
@@ -46,9 +47,25 @@ app.use('/en', createProxyMiddleware({
 }));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'cmd', 'index.html'));
+  res.sendFile(path.join(__dirname, 'cmd', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Proxy server is running on http://localhost:${PORT}`);
+// Example of using Object.assign
+const obj1 = { a: 1 };
+const obj2 = { b: 2 };
+const result = Object.assign(obj1, obj2);
+console.log(result); // Output: { a: 1, b: 2 }
+
+// Detect an open port and start the server
+detect(DEFAULT_PORT, (err, openPort) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  if (DEFAULT_PORT !== openPort) {
+    console.log(`Port ${DEFAULT_PORT} is in use, switching to port ${openPort}`);
+  }
+  app.listen(openPort, () => {
+    console.log(`Server is running on port ${openPort}`);
+  });
 });
