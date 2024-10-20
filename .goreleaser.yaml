@@ -7,8 +7,6 @@ before:
     # You may remove this if you don't use go modules.
     - go mod tidy
 
-# Add your GoReleaser configuration here
-# For example:
 builds:
   - main: ./cmd/yourapp
     goos:
@@ -26,42 +24,15 @@ archives:
     files:
       - LICENSE
       - README.md
-    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    format_overrides:
-        - goos: windows
-          format: zip
-
-checksum:
-  name_template: 'checksums.txt'
-
-snapshot:
-  version_template: 'foo'
-
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^public:'
-      - '^.github:'
-
-project_name: your_project_name
 
 release:
   github:
     owner: your-github-username
     name: your-repo-name
 
-brews:
-  - name: your_project_name
-    homepage: "https://github.com/your_github_username/your_project_name"
-    description: "A brief description of your project"
-    test: |
-      system "#{bin}/your_project_name --version"
-    install: |
-      bin.install "your_project_name"
-    dependencies:
-      - go
+snapshot:
+  name_template: "{{ .Tag }}-SNAPSHOT"
+  # version_template is not a valid field for snapshot
 
 
 

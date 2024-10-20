@@ -49,6 +49,7 @@ jobs:
           version: '~> v2'
           args: release --clean
         env:
-          ITHUB_TOKEN: ${{ secrets.ITHUB_TOKEN }}
-          # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
+            # GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
           # GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
