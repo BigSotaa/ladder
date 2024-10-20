@@ -5,7 +5,7 @@
     "start": "node server.js",
     "test": "jest",
     "build-css": "npx tailwindcss -i ./styles/input.css -o ./styles/output.css --build && npx minify ./styles/output.css > ./cmd/styles.css",
-    "build": "npm run build-css && npm run build-other"
+    "build": "npm run build-css"
   },
   "dependencies": {
     "tailwindcss": "^3.0.0",
