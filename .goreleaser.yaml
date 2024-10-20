@@ -40,13 +40,14 @@ release:
   github:
     owner: your-github-username
     name: your-repo-name
-#brews:
-#  -
-#    repository:
-#      owner: everywall
-#      name: homebrew-ladder
-#      token: "{{ .Env.GORELEASER_GITHUB_TOKEN }}"
-#    homepage: "https://www.everyladder.dev"
-#    description: "Manage your everyladder applications modify every website"
-#    test: |
-#      system "#{bin}/everyladder", "--version"
+
+brews:
+  - name: your_project_name
+    homepage: "https://github.com/your_github_username/your_project_name"
+    description: "A brief description of your project"
+    test: |
+      system "#{bin}/your_project_name --version"
+    install: |
+      bin.install "your_project_name"
+    dependencies:
+      - go
