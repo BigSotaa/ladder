@@ -1,23 +1,64 @@
-- domain: example.com
-  domains: 
-  - www.beispiel.de
-  googleCache: true
+- domain: example.com          # Includes all subdomains
+  domains:                     # Additional domains to apply the rule
+    - www.example.de
+    - www.beispiel.de
   headers:
-    x-forwarded-for: none
-    referer: none
+    x-forwarded-for: none      # override X-Forwarded-For header or delete with none
+    referer: none              # override Referer header or delete with none
     user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36
+    content-security-policy: script-src 'self'; # override response header
     cookie: privacy=1
   regexRules:
     - match: <script\s+([^>]*\s+)?src="(/)([^"]*)"
       replace: <script $1 script="/https://www.example.com/$3"
   injections:
     - position: head # Position where to inject the code
-      append: |
+      append: |      # possible keys: append, prepend, replace
         <script>
           window.localStorage.clear();
           console.log("test");
           alert("Hello!");
         </script>
-    - position: h1
-      replace: |
-        <h1>An example with a ladder ;-)</h1>
+- domain: www.anotherdomain.com # Domain where the rule applies
+  paths:                        # Paths where the rule applies
+    - /article
+  googleCache: false            # Use Google Cache to fetch the content
+  regexRules:                   # Regex rules to apply
+    - match: <script\s+([^>]*\s+)?src="(/)([^"]*)"
+      replace: <script $1 script="/https://www.example.com/$3"
+  injections:
+    - position: .left-content article .post-title # Position where to inject the code into DOM
+      replace: | 
+        <h1>My Custom Title</h1>
+    - position: .left-content article # Position where to inject the code into DOM
+      prepend: | 
+        <h2>Subtitle</h2>
+- domain: demo.com
+  headers:
+    content-security-policy: script-src 'self';
+    user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36
+  urlMods:              # Modify the URL
+    query:              
+      - key: amp        # (this will append ?amp=1 to the URL)
+        value: 1 
+    domain:             
+      - match: www      # regex to match part of domain
+        replace: amp    # (this would modify the domain from www.demo.de to amp.demo.de)
+    path:               
+      - match: ^        # regex to match part of path
+        replace: /amp/  # (modify the url from https://www.demo.com/article/ to https://www.demo.de/amp/article/)
+- domain: https://www.tiktok.com/en/
+  headers:
+    content-security-policy: script-src 'self';
+    user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36
+  injections:
+    - position: head
+      append: |
+        <style>
+          body {
+            transform: rotate(90deg);
+            transform-origin: top left;
+            width: 100vh;
+            overflow-x: hidden;
+          }
+        </style>
