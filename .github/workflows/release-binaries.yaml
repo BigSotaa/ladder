@@ -3,7 +3,7 @@ name: Release Binaries
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*.*.*'
   workflow_dispatch:
 
 jobs:
@@ -26,6 +26,9 @@ jobs:
 
       - name: Install npm dependencies
         run: npm install
+
+      - name: Install pnpx
+        run: npm install -g pnpm
 
       - name: Build JavaScript project
         run: npm run build
