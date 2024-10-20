@@ -50,6 +50,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'cmd', 'index.html'));
 });
 
+// Add a route to handle requests to /explore
+app.get('/explore', (req, res) => {
+  res.sendFile(path.join(__dirname, 'cmd', 'explore.html'));
+});
+
 // Example of using Object.assign
 const obj1 = { a: 1 };
 const obj2 = { b: 2 };
