@@ -1,53 +1,45 @@
+---
+# This GitHub Actions workflow is named "Release Binaries".
+# It is designed to automate the process of releasing binaries for the project.
+# The workflow is defined in the file located at:
+# /Users/andrewbulthuis/VS Code/ladder/.github/workflows/release-binaries.yaml
 name: Release Binaries
 
 on:
   push:
+    #branches:
+    #  - master
+
+    # Publish `v1.2.3` tags as releases.
     tags:
-      - 'v*.*.*'
+      - v*
   workflow_dispatch:
 
 jobs:
-  build:
+  goreleaser:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
+      -
+        name: Checkout
+        uses: actions/checkout@v4
         with:
-          go-version: '1.20'
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+          fetch-depth: 0
+      -
+        name: Set version
+        run: |
+          echo -n $(git describe --tags --abbrev=0) > handlers/VERSION
+      -
+        name: Set up Go
+        uses: actions/setup-go@v3
         with:
-          node-version: '16'
-
-      - name: Install npm dependencies
-        run: npm install
-
-      - name: Install pnpx
-        run: npm install -g pnpm
-
-      - name: Build JavaScript project
-        run: npm run build
-
-      - name: Set up C++ environment
-        run: sudo apt-get install -y build-essential
-
-      - name: Build C++ project
-        run: make
-
-      - name: Install GoReleaser
-        uses: goreleaser/goreleaser-action@v2
+          go-version: 1.21
+      -
+        name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v5
         with:
+          distribution: goreleaser
           version: latest
-
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v2
-        with:
-          args: release --rm-dist
+          args: release --clean
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GORELEASER_GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_GORELEASER }}
+# GORELEASER_GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}

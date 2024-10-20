@@ -9,7 +9,7 @@ RUN go mod download
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o ladder cmd/main.go
 
-FROM debian:12-slim as release
+FROM debian:12-slim AS release
 
 WORKDIR /app
 

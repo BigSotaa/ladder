@@ -1,16 +1,32 @@
 project_name: my_project
+---
+version: 2
 
-release:
-  github:
-    owner: my_github_username
-    name: my_project
+before:
+  hooks:
+    - go mod tidy
 
 builds:
-  - main: ./cmd/my_project
+  - id: build
+    main: ./cmd/main.go
     goos:
       - linux
-      - windows
       - darwin
+      - windows
     goarch:
       - amd64
       - arm64
+    ldflags:
+      - -s -w
+
+archives:
+  - format: tar.gz
+    files:
+      - LICENSE
+      - README.md
+
+release:
+  github:
+    owner: your-github-username
+    name: your-repo-name
+    # token: ${{ secrets.GORELEASER_GITHUB_TOKEN }}

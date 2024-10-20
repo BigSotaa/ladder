@@ -1,42 +1,41 @@
-name: Build Tailwind CSS
+name: Build CSS
 
 on:
   push:
-    paths:
-      - "handlers/form.html"
-  workflow_dispatch:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   tailwindbuilder:
-    permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the
-      # added or changed files to the repository.
-      contents: write
-      
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
     steps:
-      -
-        name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
-      -
-        name: Install pnpm
-        uses: pnpm/action-setup@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          version: 8
-      -
-        name: Build Tailwind CSS
-        run: pnpm build
-      -
-        name: Commit generated stylesheet
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build CSS
+        run: npm run build-css
+
+      - name: Commit and push changes
         run: |
-          if git diff --quiet cmd/styles.css; then
-            echo "No changes to commit."
-            exit 0
-          else
-            echo "Changes detected, committing..."
-            git config --global user.name "Github action"
-            git config --global user.email "username@users.noreply.github.com"
-            git add cmd
-            git commit -m "Generated stylesheet"
-            git push
-          fi
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+          git add .
+          git commit -m "Update CSS"
+          git push
+        env:
+          GORELEASER_GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}
