@@ -29,5 +29,5 @@ jobs:
         with:
           args: "--config=.goreleaser.yaml"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ITHUB_TOKEN: ${{ secrets.ITHUB_TOKEN }}
           GORELEASER_GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}
