@@ -1,38 +1,18 @@
-# This is an example .goreleaser.yml file with some sensible defaults.
-# Make sure to check the documentation at https://goreleaser.com
-version: 2
 
-before:
-  hooks:
-    # You may remove this if you don't use go modules.
-    - go mod tidy
-
+# This file should contain GoReleaser configuration, not GitHub Actions workflow.
+# Move the jobs section to a .github/workflows/ file and keep GoReleaser configuration here.
+# Example GoReleaser configuration:
+project_name: my_project
+release:
+  github:
+    owner: my_github_username
+    name: my_project
 builds:
-  - main: ./cmd/yourapp
+  - main: ./cmd/my_project
     goos:
       - linux
-      - darwin
       - windows
+      - darwin
     goarch:
       - amd64
       - arm64
-    ldflags:
-      - -s -w
-
-archives:
-  - format: tar.gz
-    files:
-      - LICENSE
-      - README.md
-
-release:
-  github:
-    owner: your-github-username
-    name: your-repo-name
-
-snapshot:
-  name_template: "{{ .Tag }}-SNAPSHOT"
-  # version_template is not a valid field for snapshot
-
-
-
