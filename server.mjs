@@ -80,3 +80,9 @@ app.get('/redirect', (req, res) => {
   const url = req.query.url;
   res.redirect(url);
 });
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
