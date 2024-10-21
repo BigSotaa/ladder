@@ -1,7 +1,7 @@
-const express = require('express');
-const { createProxyMiddleware } = require('http-proxy-middleware');
-const path = require('path');
-const detect = require('detect-port');
+import express from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import path from 'path';
+import detect from 'detect-port';
 
 const app = express();
 const DEFAULT_PORT = process.env.PORT || 3002;
@@ -10,7 +10,7 @@ const DEFAULT_PORT = process.env.PORT || 3002;
 app.use(express.static(path.join(__dirname, 'cmd')));
 
 // Middleware to modify the response
-app.use((req, res, next) => {
+app.use((_, res, next) => {
   const originalSend = res.send;
   res.send = function (body) {
     if (typeof body === 'string') {
@@ -39,19 +39,19 @@ app.use('/en', createProxyMiddleware({
   pathRewrite: {
     '^/en': '' // Remove the /en prefix when forwarding to the target
   },
-  onProxyReq: (proxyReq, req, res) => {
+  onProxyReq: (proxyReq) => {
     // Modify headers
     proxyReq.setHeader('Content-Security-Policy', "script-src 'self'");
     proxyReq.setHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36');
   }
 }));
 
-app.get('/', (req, res) => {
+app.get('/', (_, res) => {
   res.sendFile(path.join(__dirname, 'cmd', 'index.html'));
 });
 
 // Add a route to handle requests to /explore
-app.get('/explore', (req, res) => {
+app.get('/explore', (_, res) => {
   res.sendFile(path.join(__dirname, 'cmd', 'explore.html'));
 });
 
@@ -73,4 +73,10 @@ detect(DEFAULT_PORT, (err, openPort) => {
   app.listen(openPort, () => {
     console.log(`Server is running on http://localhost:${openPort}`);
   });
+});
+
+// Add a route to handle redirect requests
+app.get('/redirect', (req, res) => {
+  const url = req.query.url;
+  res.redirect(url);
 });
