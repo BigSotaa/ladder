@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"embed"
@@ -7,7 +7,6 @@ import (
 	"os"
 	"strings"
 
-	"ladder/handlers"
 	"ladder/handlers/cli"
 
 	"github.com/akamensky/argparse"
@@ -17,7 +16,30 @@ import (
 )
 
 //go:embed favicon.ico
-var faviconData []byte
+var faviconData embed.FS
+<<<<<<< Tabnine <<<<<<<
+//go:embed favicon.ico//+
+var faviconData embed.FS//+
+//+
+//go:embed styles.css//+
+var cssData embed.FS//+
+//+
+func main() {//+
+    // ... (rest of the main function)//+
+//+
+    faviconBytes, err := faviconData.ReadFile("favicon.ico")//+
+    if err != nil {//+
+        log.Fatalf("Failed to read favicon: %v", err)//+
+    }//+
+//+
+    app.Use(favicon.New(favicon.Config{//+
+        Data: faviconBytes,//+
+        URL:  "/favicon.ico",//+
+    }))//+
+//+
+    // ... (rest of the main function)//+
+}//+
+>>>>>>> Tabnine >>>>>>>// {"conversationId":"b31d0f70-12b8-4a39-a42c-46f2691d61ac","source":"instruct"}
 
 //go:embed styles.css
 var cssData embed.FS
@@ -109,8 +131,13 @@ func main() {
 		}))
 	}
 
+	faviconBytes, err := faviconData.ReadFile("favicon.ico")
+	if err != nil {
+		log.Fatalf("Failed to read favicon: %v", err)
+	}
+
 	app.Use(favicon.New(favicon.Config{
-		Data: []byte(faviconData),
+		Data: faviconBytes,
 		URL:  "/favicon.ico",
 	}))
 
@@ -122,7 +149,7 @@ func main() {
 		})
 	}
 
-	app.Get("/", handlers.Form)
+	app.Get("/", cli.Form)
 
 	app.Get("/styles.css", func(c *fiber.Ctx) error {
 		cssData, err := cssData.ReadFile("styles.css")
@@ -135,10 +162,10 @@ func main() {
 		return c.Send(cssData)
 	})
 
-	app.Get("ruleset", handlers.Ruleset)
-	app.Get("raw/*", handlers.Raw)
-	app.Get("api/*", handlers.Api)
-	app.Get("/*", handlers.ProxySite(*ruleset))
+	app.Get("ruleset", cli.Ruleset)
+	app.Get("raw/*", cli.Raw)
+	app.Get("api/*", cli.Api)
+	app.Get("/*", cli.ProxySite(*ruleset))
 
 	log.Fatal(app.Listen(":" + *port))
 }

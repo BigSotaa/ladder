@@ -2,17 +2,15 @@ import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import path from 'path';
 import detect from 'detect-port';
+import { fileURLToPath } from 'url';
 
 const app = express();
-const DEFAULT_PORT = process.env.PORT || 3002;
-
-import path from 'path';
-import { fileURLToPath } from 'url';
+const DEFAULT_PORT = process.env.PORT || 3005;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(__dirname, 'cmd')));// Serve static files from the "cmd" directory
+app.use(express.static(path.join(__dirname, 'cmd'))); // Serve static files from the "cmd" directory
 
 // Middleware to modify the response
 app.use((_, res, next) => {
@@ -51,6 +49,15 @@ app.use('/en', createProxyMiddleware({
   }
 }));
 
+// Add a new proxy middleware to handle requests to tiktok.com
+app.use('/tiktok', createProxyMiddleware({
+  target: 'https://www.tiktok.com',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/tiktok': '' // Remove the /tiktok prefix when forwarding to the target
+  }
+}));
+
 app.get('/', (_, res) => {
   res.sendFile(path.join(__dirname, 'cmd', 'index.html'));
 });
@@ -84,10 +91,4 @@ detect(DEFAULT_PORT, (err, openPort) => {
     const url = req.query.url;
     res.redirect(url);
   });
-});
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
 });
