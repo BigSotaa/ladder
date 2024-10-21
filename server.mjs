@@ -6,8 +6,13 @@ import detect from 'detect-port';
 const app = express();
 const DEFAULT_PORT = process.env.PORT || 3002;
 
-// Serve static files from the "cmd" directory
-app.use(express.static(path.join(__dirname, 'cmd')));
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, 'cmd')));// Serve static files from the "cmd" directory
 
 // Middleware to modify the response
 app.use((_, res, next) => {
@@ -73,12 +78,12 @@ detect(DEFAULT_PORT, (err, openPort) => {
   app.listen(openPort, () => {
     console.log(`Server is running on http://localhost:${openPort}`);
   });
-});
 
-// Add a route to handle redirect requests
-app.get('/redirect', (req, res) => {
-  const url = req.query.url;
-  res.redirect(url);
+  // Add a route to handle redirect requests
+  app.get('/redirect', (req, res) => {
+    const url = req.query.url;
+    res.redirect(url);
+  });
 });
 
 const PORT = process.env.PORT || 3000;
